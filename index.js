@@ -29,6 +29,13 @@ async function run(){
             const result = await servicesCollection.insertOne(service);
             console.log(result);
             res.json(result);
+        });
+
+        // Get api 
+        app.get('/services', async(req, res)=>{
+            const cursor = servicesCollection.find({});
+            const services = await cursor.toArray();
+            res.send(services);
         })
 
     }
