@@ -45,6 +45,14 @@ async function run(){
             const query = {_id: ObjectId(id)};
             const service = await servicesCollection.findOne(query);
             res.json(service)
+        });
+
+        // Delete api 
+        app.delete('/services/:id', async(req, res)=>{
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)};
+            const service = await servicesCollection.deleteOne(query);
+            res.json(service);
         })
 
     }
@@ -61,4 +69,4 @@ app.get('/', (req, res)=>{
 
 app.listen(port, ()=>{
     console.log("listening", port)
-})
+});
