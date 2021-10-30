@@ -33,7 +33,7 @@ async function run(){
             res.json(result);
         });
 
-        // added users in database 
+        // Added users in database 
         app.post('/users', async(req, res)=>{
             const user = req.body;
             console.log('added users', user)
