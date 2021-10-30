@@ -22,6 +22,7 @@ async function run(){
         await client.connect();
         const database = client.db("TourPlan");
         const servicesCollection = database.collection("services");
+        const usersCollection = database.collection("users");
 
         // POST Api 
         app.post('/services', async(req, res)=>{
@@ -31,6 +32,14 @@ async function run(){
             console.log(result);
             res.json(result);
         });
+
+        // added users in database 
+        app.post('/users', async(req, res)=>{
+            const user = req.body;
+            console.log('added users', user)
+            const result =await usersCollection.insertOne(user);
+            res.json(result)
+        })
 
         // Get api 
         app.get('/services', async(req, res)=>{
@@ -47,13 +56,21 @@ async function run(){
             res.json(service)
         });
 
+        // find my service 
+        app.get('/myservice/:email', async(req, res)=>{
+            const result = await servicesCollection.find({email: req.params.email}).toArray();
+            res.send(result)
+        })
+
         // Delete api 
         app.delete('/services/:id', async(req, res)=>{
             const id = req.params.id;
             const query = {_id: ObjectId(id)};
             const service = await servicesCollection.deleteOne(query);
             res.json(service);
-        })
+        });
+
+
 
     }
     finally {
