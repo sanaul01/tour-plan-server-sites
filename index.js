@@ -33,22 +33,22 @@ async function run(){
             res.json(result);
         });
 
-        // Added users in database 
+        // Added users in Database 
         app.post('/users', async(req, res)=>{
             const user = req.body;
             console.log('added users', user)
             const result =await usersCollection.insertOne(user);
             res.json(result)
-        })
+        });
 
-        // Get api 
+        // Get Api 
         app.get('/services', async(req, res)=>{
             const cursor = servicesCollection.find({});
             const services = await cursor.toArray();
             res.send(services);
         });
 
-        // Get A service 
+        // Get A Service 
         app.get('/services/:id', async(req, res)=>{
             const id = req.params.id; 
             const query = {_id: ObjectId(id)};
@@ -56,21 +56,38 @@ async function run(){
             res.json(service)
         });
 
-        // find my service 
+        // Update Service
+        app.put('/services/:id', async(req, res)=>{
+            const id = req.params.id;
+            const updateService =req.body;
+            const filter = {_id: ObjectId(id)};
+            const options = { upsert: true }
+            const updateDoc = {
+                $set: {
+                    title: updateService.title,
+                    price: updateService.price,
+                    description: updateService.description,
+                    img: updateService.img
+                }
+            };
+            const result = await servicesCollection.updateOne(filter, updateDoc, options)
+            // console.log('hit update', id)
+            res.json(result)
+        });
+
+        // Find my service 
         app.get('/myservice/:email', async(req, res)=>{
             const result = await servicesCollection.find({email: req.params.email}).toArray();
             res.send(result)
-        })
+        });
 
-        // Delete api 
+        // Delete Service 
         app.delete('/services/:id', async(req, res)=>{
             const id = req.params.id;
             const query = {_id: ObjectId(id)};
             const service = await servicesCollection.deleteOne(query);
             res.json(service);
         });
-
-
 
     }
     finally {
