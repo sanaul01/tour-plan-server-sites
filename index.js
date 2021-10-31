@@ -123,7 +123,7 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res)=>{
-    res.send('Tour Plan')
+    res.send('Tour Plan is running')
 });
 
 app.listen(port, ()=>{
